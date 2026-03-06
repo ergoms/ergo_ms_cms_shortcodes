@@ -72,7 +72,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import * as Icons from 'lucide-vue-next'
-import { categoryService } from '../js/shortcodeCategoryService.js'
+import { shortcodesService } from '../js/shortcodesService.js'
 
 const categories = ref([])
 const form = ref({ id: null, name: '' })
@@ -81,7 +81,7 @@ const isEditing = ref(false)
 const sortedCategories = computed(() => [...categories.value].sort((a, b) => a.id - b.id))
 
 async function loadCategories() {
-  const res = await categoryService.getCategories()
+  const res = await shortcodesService.getCategories()
   if (res.success) {
     categories.value = res.data
   } else {
@@ -103,8 +103,8 @@ async function saveCategory() {
   try {
     const payload = { name: form.value.name }
     let res = isEditing.value
-      ? await categoryService.updateCategory(form.value.id, payload)
-      : await categoryService.createCategory(payload)
+      ? await shortcodesService.updateCategory(form.value.id, payload)
+      : await shortcodesService.createCategory(payload)
     if (res.success) {
       await loadCategories()
       resetForm()
@@ -119,7 +119,7 @@ async function saveCategory() {
 
 async function deleteCategory(id) {
   if (!confirm('Удалить эту категорию?')) return
-  const res = await categoryService.deleteCategory(id)
+  const res = await shortcodesService.deleteCategory(id)
   if (res.success) {
     await loadCategories()
   } else {

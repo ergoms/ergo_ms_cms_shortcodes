@@ -83,7 +83,6 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { shortcodesService } from '../js/shortcodesService.js'
-import { categoryService } from '../js/shortcodeCategoryService.js'
 import * as Icons from 'lucide-vue-next'
 import IconPicker from '../components/IconPicker.vue'
 
@@ -111,7 +110,7 @@ const extraDataJson = ref('{}')
 
 // Загрузка списка категорий
 async function loadCategories() {
-  const res = await categoryService.getCategories()
+  const res = await shortcodesService.getCategories()
   if (res.success) {
     categories.value = res.data
     // по-умолчанию выбираем первый, если новый шаблон
