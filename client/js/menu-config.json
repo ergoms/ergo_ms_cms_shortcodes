@@ -23,8 +23,16 @@
           "name": "Разметка сайта"
         },
         {
-          "routeName": "PageShortcodeCategories",
-          "name": "Категории шорткодов"
+          "routeName": "Categories",
+          "name": "Категории"
+        },
+        {
+          "routeName": "PageCategoriesManager",
+          "name": "Создание категорий"
+        },
+        {
+          "routeName": "TagsManager",
+          "name": "Создание тегов"
         }
       ]
     }

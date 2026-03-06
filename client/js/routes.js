@@ -40,11 +40,27 @@ export default {
       requiresAuth: true
     }
   },
-  PageShortcodeCategories: {
-    path: '/shortcodes/categories-page',
+  Categories: {
+    path: '/shortcodes/categories',
     component: '@/modules/cms_shortcodes/client/src/editor/PageCategories.vue',
     meta: {
       title: 'Категории страниц',
+      requiresAuth: true
+    }
+  },
+  PageCategoriesManager: {
+    path: '/shortcodes/categories/manager',
+    component: '@/modules/cms_shortcodes/client/src/editor/CategoriesManagerPage.vue',
+    meta: {
+      title: 'Создание категорий',
+      requiresAuth: true
+    }
+  },
+  TagsManager: {
+    path: '/shortcodes/categories/tags',
+    component: '@/modules/cms_shortcodes/client/src/editor/TagsManagerPage.vue',
+    meta: {
+      title: 'Создание тегов',
       requiresAuth: true
     }
   },

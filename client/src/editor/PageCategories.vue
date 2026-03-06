@@ -1,154 +1,136 @@
-<template>
-  <div class="page-categories p-4">
-    <h1 class="mb-4">Управление категориями</h1>
+<script setup>
+import { useRouter } from 'vue-router'
+import { Tag, Hash } from 'lucide-vue-next'
 
-    <div class="card mb-4">
-      <div class="card-header">
-        <h5 class="mb-0">{{ isEditing ? 'Редактировать категорию' : 'Новая категория' }}</h5>
-      </div>
-      <div class="card-body">
-        <form @submit.prevent="saveCategory">
-          <div class="row g-3 align-items-end">
-            <div class="col-md-6">
-              <label class="form-label">Название</label>
-              <input
-                v-model="form.name"
-                type="text"
-                class="form-control"
-                placeholder="Название"
-                required
-              />
-            </div>
-            <div class="col-md-2 d-grid">
-              <button type="submit" class="btn btn-primary">
-                {{ isEditing ? 'Сохранить' : 'Добавить' }}
-              </button>
+const router = useRouter()
+const goToCategories = () => router.push({ name: 'PageCategoriesManager' })
+const goToTags = () => router.push({ name: 'TagsManager' })
+</script>
+
+<template>
+  <div class="categories-card min-vh-100 d-flex align-items-center">
+    <div class="container pt-1">
+      <div class="fancy-title mx-auto">Управление категориями и тегами</div>
+      <div class="main-card mx-auto">
+        <div class="main-card-header"></div>
+        <div class="row gx-5 gy-5 mt-1 align-items-stretch">
+          <div class="col-12 col-md-6 d-flex">
+            <div class="section-card border-success flex-grow-1" @click="goToCategories">
+              <component :is="Tag" size="40" class="section-icon text-success" />
+              <div class="section-content">
+                <div class="section-title">Менеджер категорий</div>
+                <div class="section-desc">Создавайте, редактируйте и удаляйте категории</div>
+              </div>
             </div>
           </div>
-        </form>
+          <div class="col-12 col-md-6 d-flex">
+            <div class="section-card border-hash flex-grow-1" @click="goToTags">
+              <span class="main-card-icon bg-hash" style="padding: 0.7rem 0.7rem; margin-right: 1.7rem;">
+                <component :is="Hash" size="28" class="section-icon text-hash" style="margin-right:0;" />
+              </span>
+              <div class="section-content">
+                <div class="section-title">Менеджер тегов</div>
+                <div class="section-desc">Управляйте тегами для быстрого поиска</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <!-- Таблица категорий -->
-    <div class="table-responsive">
-      <table class="table table-striped align-middle">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Название</th>
-            <th class="text-end">Действия</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="cat in sortedCategories" :key="cat.id">
-            <td>{{ cat.id }}</td>
-            <td>{{ cat.name }}</td>
-            <td class="text-end">
-              <button
-                @click="openEditForm(cat)"
-                class="btn btn-sm btn-outline-secondary me-2"
-                title="Редактировать"
-              >
-                <Icons.Pencil size="16" />
-              </button>
-              <button
-                @click="deleteCategory(cat.id)"
-                class="btn btn-sm btn-outline-danger"
-                title="Удалить"
-              >
-                <Icons.Trash2 size="16" />
-              </button>
-            </td>
-          </tr>
-          <tr v-if="!categories.length">
-            <td colspan="3" class="text-center text-muted">Нет ни одной категории</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted, computed } from 'vue'
-import * as Icons from 'lucide-vue-next'
-import { shortcodesService } from '../js/shortcodesService.js'
-
-const categories = ref([])
-const form = ref({ id: null, name: '' })
-const isEditing = ref(false)
-
-const sortedCategories = computed(() => [...categories.value].sort((a, b) => a.id - b.id))
-
-async function loadCategories() {
-  const res = await shortcodesService.getCategories()
-  if (res.success) {
-    categories.value = res.data
-  } else {
-    alert('Ошибка загрузки: ' + JSON.stringify(res.errors))
-  }
-}
-
-function resetForm() {
-  form.value = { id: null, name: '' }
-  isEditing.value = false
-}
-
-function openEditForm(cat) {
-  form.value = { id: cat.id, name: cat.name }
-  isEditing.value = true
-}
-
-async function saveCategory() {
-  try {
-    const payload = { name: form.value.name }
-    let res = isEditing.value
-      ? await shortcodesService.updateCategory(form.value.id, payload)
-      : await shortcodesService.createCategory(payload)
-    if (res.success) {
-      await loadCategories()
-      resetForm()
-    } else {
-      alert('Ошибка сохранения: ' + JSON.stringify(res.errors))
-    }
-  } catch (e) {
-    console.error(e)
-    alert('Ошибка запроса')
-  }
-}
-
-async function deleteCategory(id) {
-  if (!confirm('Удалить эту категорию?')) return
-  const res = await shortcodesService.deleteCategory(id)
-  if (res.success) {
-    await loadCategories()
-  } else {
-    alert('Ошибка удаления: ' + JSON.stringify(res.errors))
-  }
-}
-
-onMounted(loadCategories)
-</script>
-
 <style scoped>
-.page-categories {
-  background-color: #f8f9fa;
+.fancy-title {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #212529;
+  text-align: center;
+  margin-bottom: 3.5rem;
+  position: relative;
+  display: inline-block;
+}
+.fancy-title::after {
+  content: '';
+  position: absolute;
+  bottom: -14px;
+  left: 47%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 3px;
+  border-radius: 4px;
+}
+.main-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+.main-card-icon {
+  background: #eaf0fc;
+  border-radius: 50%;
+  margin-right: 1.7rem;
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bg-hash {
+  background: #fff2e1 !important;
+}
+.text-hash {
+  color: #ff9800 !important;
+}
+.section-card {
+  display: flex;
+  align-items: center;
+  padding: 3.5rem 3rem;
+  min-height: 250px;
+  border-radius: 2.2rem;
+  box-shadow: 0 6px 24px rgba(50,80,180,0.07);
+  cursor: pointer;
+  transition:
+    box-shadow 0.22s,
+    transform 0.22s,
+    border-color 0.22s,
+    background 0.22s;
+  border: 5px solid #f7b045;
+  margin-bottom: 2.2rem;
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  background: transparent;
+}
+.section-card:hover {
+  box-shadow: 0 12px 36px rgba(30,80,180,0.19);
+  transform: translateY(-6px) scale(1.05);
+  border-color: #fff !important;
+  background: #fff;
 }
 
-.card {
-  border: none;
+.border-success {
+  border-color: #4CAF50 !important;
+}
+.border-hash {
+  border-color: #ff9800 !important;
 }
 
-.table thead {
-  background-color: #e9edf2;
+.section-icon {
+  margin-right: 2rem;
+  font-size: 2.5rem;
 }
-
-.table-striped > tbody > tr:nth-of-type(odd) {
-  background-color: #fff;
+.section-title {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #253152;
+  margin-bottom: 0.6rem;
 }
-
-.btn-outline-secondary:hover,
-.btn-outline-danger:hover {
-  opacity: 0.8;
+.section-desc {
+  font-size: 1.25rem;
+  color: #627083;
+  margin-top: 0.4rem;
+}
+.section-content {
+  flex: 1;
 }
 </style>
