@@ -58,6 +58,11 @@ class PageViewSet(viewsets.ModelViewSet):
     ordering_fields = ['date_of_creation', 'name']
     ordering = ['-date_of_creation']
 
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve', 'latest']:
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
     def get_queryset(self):
         qs = super().get_queryset()
         limit = self.request.query_params.get('limit')
@@ -179,9 +184,13 @@ class SiteLayoutViewSet(viewsets.ModelViewSet):
 
 
 class SiteLayoutView(generics.RetrieveUpdateAPIView):
-    permission_classes = [permissions.AllowAny]
     serializer_class = SiteLayoutSerializer
     queryset = SiteLayout.objects.all()
+
+    def get_permissions(self):
+        if self.request.method in ('GET', 'HEAD', 'OPTIONS'):
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
 
     def get_object(self):
         obj, _ = SiteLayout.objects.get_or_create(pk=1)
