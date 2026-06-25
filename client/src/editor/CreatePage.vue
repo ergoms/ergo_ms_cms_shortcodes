@@ -119,7 +119,6 @@ import CategoryTree from './CategoryTree.vue'
 import { apiClient } from '@/js/api/manager'
 import { endpoints } from '@/js/api/endpoints'
 import { shortcodesService } from '../js/shortcodesService.js'
-import { logError } from '@/js/utils/logError.js'
 
 const meta = ref({ title: '', slug: '', index: false })
 const slugEdited = ref(false)

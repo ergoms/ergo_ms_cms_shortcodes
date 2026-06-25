@@ -3,7 +3,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { ref, watch, computed } from 'vue'
 import { shortcodesService } from './js/shortcodesService.js'
 import PublicCanvas from './PublicCanvas.vue'
-import { logError } from '@/js/utils/logError.js'
 
 const route = useRoute()
 const router = useRouter()

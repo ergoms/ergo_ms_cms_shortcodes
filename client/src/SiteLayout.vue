@@ -93,7 +93,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { shortcodesService } from './js/shortcodesService.js'
-import { logError } from '@/js/utils/logError.js'
 
 const templates = ref([])
 const pages = ref([])
