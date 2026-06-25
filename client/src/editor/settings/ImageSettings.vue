@@ -58,6 +58,7 @@
 import { ref, computed, toRefs, watch } from 'vue'
 import { apiClient } from '@/js/api/manager'
 import { endpoints } from '@/js/api/endpoints'
+import { logError } from '@/js/utils/logError.js'
 
 const props = defineProps({ component: Object })
 const { component } = toRefs(props)
@@ -122,7 +123,7 @@ async function uploadFile(e) {
         component.value.extra_data.alt = data.alt_name || altName.value
         altName.value = ''
     } catch (err) {
-        console.error(err)
+        logError(err)
         error.value = 'Ошибка загрузки'
     } finally {
         uploading.value = false

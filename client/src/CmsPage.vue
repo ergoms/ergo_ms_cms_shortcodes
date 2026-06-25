@@ -3,6 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ref, watch, computed } from 'vue'
 import { shortcodesService } from './js/shortcodesService.js'
 import PublicCanvas from './PublicCanvas.vue'
+import { logError } from '@/js/utils/logError.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -73,7 +74,7 @@ async function loadPage() {
     components.value = [...header, ...body, ...footer]
     loading.value = false
   } catch (e) {
-    console.error(e)
+    logError(e)
     loading.value = false
     error.value = e.message || 'Ошибка загрузки страницы'
     details.value = e

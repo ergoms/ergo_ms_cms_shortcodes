@@ -119,6 +119,7 @@ import CategoryTree from './CategoryTree.vue'
 import { apiClient } from '@/js/api/manager'
 import { endpoints } from '@/js/api/endpoints'
 import { shortcodesService } from '../js/shortcodesService.js'
+import { logError } from '@/js/utils/logError.js'
 
 const meta = ref({ title: '', slug: '', index: false })
 const slugEdited = ref(false)
@@ -216,7 +217,7 @@ const savePage = async () => {
 
   if (!resp.success) {
     alert(resp.message || 'Ошибка создания страницы')
-    console.error(resp.errors)
+    logError(resp.errors)
     return
   }
 

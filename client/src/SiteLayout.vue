@@ -93,6 +93,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { shortcodesService } from './js/shortcodesService.js'
+import { logError } from '@/js/utils/logError.js'
 
 const templates = ref([])
 const pages = ref([])
@@ -163,7 +164,7 @@ async function save() {
 
     alert('Сохранено ✔')
   } catch (e) {
-    console.error(e)
+    logError(e)
     alert('Ошибка: ' + (e.response?.data?.detail || e.message))
   } finally {
     saving.value = false
